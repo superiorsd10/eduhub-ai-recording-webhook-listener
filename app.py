@@ -65,6 +65,7 @@ def index():
         200,
     )
 
+
 @app.route("/api/recording-webhook", methods=["POST"])
 def recording_webhook_listener():
     try:
@@ -77,6 +78,13 @@ def recording_webhook_listener():
                 room_id = transcription_data.get("room_id")
                 transcript_txt_presigned_url = transcription_data.get(
                     "transcript_txt_presigned_url"
+                )
+
+                cloudfront_distribution = os.getenv("CLOUDFRONT_DISTRIBUTION")
+
+                transcript_txt_presigned_url = transcript_txt_presigned_url.replace(
+                    "eduhub-ai.s3.ap-south-1.amazonaws.com",
+                    cloudfront_distribution,
                 )
 
                 load_dotenv()
